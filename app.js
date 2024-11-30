@@ -1,17 +1,61 @@
-import 'dotenv/config';
-import express from 'express';
-import { getRandomEmoji } from './utils.js';
-import {InteractionType, InteractionResponseType, verifyKeyMiddleware, verifyKey} from 'discord-interactions';
-import { REST, Routes, Client, GatewayIntentBits,Events } from 'discord.js';
-import { saluda } from './commands/saluda.js';
-
+const dotenv = require('dotenv'); dotenv.config();
+const fs = require('node:fs');
+const path = require('node:path')
+const express = require('express');
+require('./commands/utility/pingo.js');
+const { InteractionType, InteractionResponseType, verifyKey, verifyKeyMiddleware } = require('discord-interactions');
+const { REST, Routes, Client, Collection, GatewayIntentBits, Events, SlashCommandBuilder, MessageFlags  } = require('discord.js');
+// import 'dotenv/config';
+// import express from 'express';
+// import {InteractionType, InteractionResponseType, verifyKeyMiddleware, verifyKey} from 'discord-interactions';
+// import { REST, Routes, Client, GatewayIntentBits,Events, SlashCommandBuilder } from 'discord.js';
+// import './commands/utility/pingo.cjs';
 
 
 
 const app = express();
-const rest = new REST({version:'10'}).setToken(process.env.DISCORD_TOKEN);
-const client = new Client({intents: 53608447});
+// const rest = new REST({version:'10'}).setToken(process.env.DISCORD_TOKEN);
+const client = new Client({intents:[GatewayIntentBits.Guilds]});
+client.commands = new Collection();
 
+
+// COMMAND HANDLER
+// Cargar de comandos dinamica.
+const folders_path = path.join(__dirname, 'commands');
+const commmand_folder = fs.readdirSync(folders_path);
+for(const folder of commmand_folder) {
+    const commands_path = path.join(folders_path, folder);
+    const command_files = fs.readdirSync(commands_path).filter((file) => { return file.endsWith('.js')});
+    for (const file of command_files){
+        const file_path = path.join(commands_path, file)
+        const command = require(file_path);
+        if ('data' in command && 'execute' in command) {client.commands.set(command.data.name, command)}
+             else { console.log(`[WARNIG] the command at ${file_path} is missing a required 'data' or 'execute' property`)};
+    };
+};
+
+// EVENT HANDLER
+const events_path = path.join(__dirname, 'events');
+const event_files = fs.readdirSync(events_path).filter((file) => {return file.endsWith('.js')});
+for (const file of event_files) {
+    const file_path = path.join(events_path, file);
+    const event = require(file_path)
+    if(event.once) {client.once(event.name, (...args) => {  event.execute(...args)})}
+        else{ client.on(event.name, (...args) => { event.execute(...args)})};
+};
+
+
+
+
+
+// 
+client.login(process.env.DISCORD_TOKEN)
+ 
+
+
+// app.listen(process.env.PUERTO, () => {
+//     console.log('conectado...');
+// })
 
 // app.route('/interactions')
 // .get((dem, res) => {
@@ -60,33 +104,3 @@ const client = new Client({intents: 53608447});
 // }).delete((dem, res) => {
 
 // });
-
-client.on(Events.ClientReady, async () => {
-    console.log(`Logged in as ${client.user.username}!`);
-});
-
-
-client.on(Events.MessageCreate, async (mensaje) => {
-    const argumentos = mensaje.content.slice(1).split(' ')[0];
-    if(mensaje.author.bot) {return}
-    if (!mensaje.content.startsWith('-')) {return}
-    try {
-        saluda.run(mensaje)
-    } catch (error) {
-        console.log(`ha ocurido un error -${argumentos}`, error.message);
-    }
-    // if(argumentos === 'hola') {mensaje.reply('que tal?')}
-    
-  });
-
-
-
-
-client.login(process.env.DISCORD_TOKEN)
-
-
-
-const puerto = process.env.PUERTO || 3000
-app.listen(puerto, () => {
-    console.log('conectado...');
-})
