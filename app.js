@@ -1,26 +1,22 @@
+// REQUIRES
 const dotenv = require('dotenv'); dotenv.config();
 const fs = require('node:fs');
 const path = require('node:path')
 const express = require('express');
-require('./commands/utility/pingo.js');
 const { InteractionType, InteractionResponseType, verifyKey, verifyKeyMiddleware } = require('discord-interactions');
 const { REST, Routes, Client, Collection, GatewayIntentBits, Events, SlashCommandBuilder, MessageFlags  } = require('discord.js');
-// import 'dotenv/config';
-// import express from 'express';
-// import {InteractionType, InteractionResponseType, verifyKeyMiddleware, verifyKey} from 'discord-interactions';
-// import { REST, Routes, Client, GatewayIntentBits,Events, SlashCommandBuilder } from 'discord.js';
-// import './commands/utility/pingo.cjs';
 
 
-
+// APP EXPRESS;
 const app = express();
-// const rest = new REST({version:'10'}).setToken(process.env.DISCORD_TOKEN);
+// CLIENTE DISCORD;
 const client = new Client({intents:[GatewayIntentBits.Guilds]});
 client.commands = new Collection();
+client.cooldowns = new Collection();
 
 
-// COMMAND HANDLER
-// Cargar de comandos dinamica.
+
+// COMMANDS HANDLER // CONTROLADOR DE COMANDOS;
 const folders_path = path.join(__dirname, 'commands');
 const commmand_folder = fs.readdirSync(folders_path);
 for(const folder of commmand_folder) {
@@ -33,8 +29,7 @@ for(const folder of commmand_folder) {
              else { console.log(`[WARNIG] the command at ${file_path} is missing a required 'data' or 'execute' property`)};
     };
 };
-
-// EVENT HANDLER
+// EVENTS HANDLER // CONTROLADOR DE EVENTOS;
 const events_path = path.join(__dirname, 'events');
 const event_files = fs.readdirSync(events_path).filter((file) => {return file.endsWith('.js')});
 for (const file of event_files) {
@@ -48,14 +43,41 @@ for (const file of event_files) {
 
 
 
-// 
-client.login(process.env.DISCORD_TOKEN)
+// CONECTAR;
+client.login(process.env.DISCORD_TOKEN);
  
 
 
-// app.listen(process.env.PUERTO, () => {
-//     console.log('conectado...');
-// })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import 'dotenv/config';
+// import express from 'express';
+// import {InteractionType, InteractionResponseType, verifyKeyMiddleware, verifyKey} from 'discord-interactions';
+// import { REST, Routes, Client, GatewayIntentBits,Events, SlashCommandBuilder } from 'discord.js';
+// import './commands/utility/pingo.cjs';
+
+
 
 // app.route('/interactions')
 // .get((dem, res) => {
@@ -104,3 +126,9 @@ client.login(process.env.DISCORD_TOKEN)
 // }).delete((dem, res) => {
 
 // });
+
+
+// app.listen(process.env.PUERTO, () => {
+//     console.log('conectado...');
+// })
+
