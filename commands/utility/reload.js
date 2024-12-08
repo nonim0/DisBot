@@ -4,10 +4,11 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('reload')
         .setDescription('reload a command')
-        .addUserOption((option) =>{
-            option.setName('command')
-            .setDescription('the command to reload')
-            .setRequired(true)
+        .addUserOption((option) => {
+            return option.setName('command')
+                    .setDescription('the command to reload')
+                    .setRequired(true)
+            
         }),
     async execute(interaction) {
         const command_name = interaction.options.getString('command', true).toLowerCase();

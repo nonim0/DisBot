@@ -3,7 +3,7 @@ dotenv.config();
 const fs = require('node:fs');
 const path = require('node:path');
 const {REST, Routes} = require('discord.js');
-
+// 
 const rest = new REST({version:'10'}).setToken(process.env.DISCORD_TOKEN);
 
 
@@ -17,7 +17,7 @@ for (const folder of command_folders) {
     for (const file of command_files) {
         const file_path = path.join(commands_path, file);
         const command = require(file_path);
-        if ('data' in command && 'execute' in command) {
+        if ('data' in command || 'execute' in command || 'autocomplete' in command) {
             commands.push(command.data.toJSON());
         } else {
             console.log(`[WARNING] The command at ${file_path} is missing a required "data" or "execute" property.`);
@@ -29,7 +29,10 @@ for (const folder of command_folders) {
 (async () => {
     try {
         console.log(`Started refreshing ${commands.length} application (/) commands.`)
-        const data = await rest.put(Routes.applicationGuildCommands(process.env.APP_ID), {body: commands});
+        // GLOBAL SCOPE COMMANDS
+        const data = await rest.put(Routes.applicationCommands(process.env.APP_ID), {body: commands});
+        // GUILD SCOPE COMMANDS
+        // const data = await rest.put(Routes.applicationGuildCommands(process.env.APP_ID, process.env.GUILD_ID), {body: commands});
         console.log(`Successfully reloaded ${data.length} application (/) commands.`);
     } catch (error) {
         console.error(error);

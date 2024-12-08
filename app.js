@@ -3,30 +3,28 @@ const dotenv = require('dotenv'); dotenv.config();
 const fs = require('node:fs');
 const path = require('node:path')
 const express = require('express');
-const { InteractionType, InteractionResponseType, verifyKey, verifyKeyMiddleware } = require('discord-interactions');
 const { REST, Routes, Client, Collection, GatewayIntentBits, Events, SlashCommandBuilder, MessageFlags  } = require('discord.js');
 
 
 // APP EXPRESS;
 const app = express();
 // CLIENTE DISCORD;
-const client = new Client({intents:[GatewayIntentBits.Guilds]});
+const client = new Client({intents: [GatewayIntentBits.Guilds] | [GatewayIntentBits.GuildMembers] | [GatewayIntentBits.MessageContent] | [GatewayIntentBits.GuildMessages]});
 client.commands = new Collection();
-client.cooldowns = new Collection();
 
 
 
 // COMMANDS HANDLER // CONTROLADOR DE COMANDOS;
 const folders_path = path.join(__dirname, 'commands');
-const commmand_folder = fs.readdirSync(folders_path);
-for(const folder of commmand_folder) {
+const command_folder = fs.readdirSync(folders_path);
+for(const folder of command_folder) {
     const commands_path = path.join(folders_path, folder);
     const command_files = fs.readdirSync(commands_path).filter((file) => { return file.endsWith('.js')});
     for (const file of command_files){
         const file_path = path.join(commands_path, file)
         const command = require(file_path);
         if ('data' in command && 'execute' in command) {client.commands.set(command.data.name, command)}
-             else { console.log(`[WARNIG] the command at ${file_path} is missing a required 'data' or 'execute' property`)};
+             else { console.log(`[WARNING] the command at ${file_path} is missing a required 'data' or 'execute' property`)};
     };
 };
 // EVENTS HANDLER // CONTROLADOR DE EVENTOS;
@@ -36,7 +34,7 @@ for (const file of event_files) {
     const file_path = path.join(events_path, file);
     const event = require(file_path)
     if(event.once) {client.once(event.name, (...args) => {  event.execute(...args)})}
-        else{ client.on(event.name, (...args) => { event.execute(...args)})};
+        else { client.on(event.name, (...args) => { event.execute(...args)})}
 };
 
 
