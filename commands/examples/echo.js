@@ -1,5 +1,4 @@
 const { SlashCommandBuilder, ChannelType } = require("discord.js");
-const { execute } = require("./server");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -17,5 +16,6 @@ module.exports = {
                 .addChannelTypes(ChannelType.GuildText)})
         .addBooleanOption((option) => {
             return option.setName('ephemeral')
-                .setDescription('whether or not the echo should be ephemeral')})
+                .setDescription('whether or not the echo should be ephemeral')}),
+    async execute(interaction) {}
     };

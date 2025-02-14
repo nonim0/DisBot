@@ -3,13 +3,13 @@ const dotenv = require('dotenv'); dotenv.config();
 const fs = require('node:fs');
 const path = require('node:path')
 const express = require('express');
-const { REST, Routes, Client, Collection, GatewayIntentBits, Events, SlashCommandBuilder, MessageFlags  } = require('discord.js');
+const { Client, Collection, GatewayIntentBits  } = require('discord.js');
 
 
 // APP EXPRESS;
 const app = express();
 // CLIENTE DISCORD;
-const client = new Client({intents: [GatewayIntentBits.Guilds] | [GatewayIntentBits.GuildMembers] | [GatewayIntentBits.MessageContent] | [GatewayIntentBits.GuildMessages]});
+const client = new Client({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMessageReactions]});
 client.commands = new Collection();
 
 

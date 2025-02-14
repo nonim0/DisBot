@@ -1,13 +1,12 @@
-const { Events, Collection, MessageFlags } = require("discord.js");
+const { Events, MessageFlags } = require("discord.js");
 
 module.exports = {
     name: Events.InteractionCreate,
     async execute(interaction) {
-        // if(!interaction.isChatInputCommand() && !interaction.isAutocomplete()){return};
         if (interaction.isChatInputCommand()) {
             // CHAT-INPUT HANDLER
             const command = interaction.client.commands.get(interaction.commandName);
-            if (!command){ console.error(`no command matching ${interaction.commandName} was found`); return };
+            if (!command) { console.error(`no command matching ${interaction.commandName} was found`); return };
             try { 
                 await command.execute(interaction)
             } catch (error) { 
@@ -19,7 +18,6 @@ module.exports = {
                 };
             };
         } else if (interaction.isAutocomplete()) {
-            // AUTO-COMPLETE HANDLER
             const command = interaction.client.commands.get(interaction.commandName);
             if (!command){ console.error(`no command matching ${interaction.commandName} was found`); return };
             try { 
@@ -36,11 +34,17 @@ module.exports = {
             // try {console.log(interaction)}
             //     catch (error) {console.error(error)};
         } else if (interaction.isStringSelectMenu()) {
-            // try {console.log(interaction)}
-            //     catch (error) {console.error(error)};
-        } else if (interaction.isMessageComponent()) {
-            // try {console.log(interaction)}
-            //     catch (error) {console.error(error)}
+            if (interaction.customId === 'type of rally') {
+                try {await interaction.reply({content: 'done'}) }
+                catch (error) {console.error(error)};
+            };
+        } else if (interaction.isModalSubmit()) {
+            if (interaction.customId === 'game name') {await interaction.reply({content: 'Your submission was received successfully!' })};
+            const submited_game_name = interaction.fields.getTextInputValue('game_name_input')
+            console.log(submited_game_name)
+        } else if (interaction.isUserContextMenuCommand()){
+            const { username } = interaction.targetUser
+            if (username) {await interaction.reply(username)}
         };
     }
 };
