@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, MessageFlags } = require("discord.js");
 const interaction_create = require("../../events/interaction_create");
 
 module.exports = {
@@ -21,5 +21,11 @@ module.exports = {
         const filtered = choices.filter((choice) => { return choice.startsWith(focused_option.value)})
         await interaction.respond(filtered.map((choice) => {return {name: choice, value: choice}}));
     },
-    async execute(interaction) {interaction.reply('done')}
+    async execute(interaction) {
+        //console.log(interaction.options.get('version').value);
+        const version = interaction.options.get('version').value;
+        const query = interaction.options.get('query').value;
+        const respuesta = 'realizando busqueda sobre: ' + query + ' version: ' + version + '.'
+        interaction.reply({content: respuesta, flags: MessageFlags.Ephemeral })
+    }
 };

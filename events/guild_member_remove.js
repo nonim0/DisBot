@@ -5,7 +5,7 @@ module.exports = {
     async execute(member) {
         const { channels } = member.guild;
         const { username } = member.user;
-        const report_channel = await channels.cache.find((channel) => {return channel.name === 'report'}).fetch();
+        const report_channel = await channels.cache.find((channel) => {return channel.name === 'oracle-board'}).fetch();
         const removed_member_username = username
         const exit_embed = new EmbedBuilder()
                 .setColor(0xcfeb34)

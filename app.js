@@ -4,12 +4,14 @@ const fs = require('node:fs');
 const path = require('node:path')
 const express = require('express');
 const { Client, Collection, GatewayIntentBits  } = require('discord.js');
+const {Guilds, GuildMembers, GuildMessages, MessageContent, GuildMessageReactions } = GatewayIntentBits;
+const { TOKEN, PUERTO } = process.env
 
 
 // APP EXPRESS;
 const app = express();
 // CLIENTE DISCORD;
-const client = new Client({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMessageReactions]});
+const client = new Client({intents: [Guilds, GuildMembers, MessageContent, GuildMessages, GuildMessageReactions]});
 client.commands = new Collection();
 
 
@@ -42,7 +44,10 @@ for (const file of event_files) {
 
 
 // CONECTAR;
-client.login(process.env.DISCORD_TOKEN);
+app.listen(PUERTO, ()=>{
+    client.login(TOKEN);
+    console.log('conectado:', PUERTO )
+});
  
 
 

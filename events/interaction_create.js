@@ -1,4 +1,4 @@
-const { Events, MessageFlags } = require("discord.js");
+const { Events, MessageFlags, EmbedBuilder } = require("discord.js");
 
 module.exports = {
     name: Events.InteractionCreate,
@@ -39,9 +39,24 @@ module.exports = {
                 catch (error) {console.error(error)};
             };
         } else if (interaction.isModalSubmit()) {
-            if (interaction.customId === 'game name') {await interaction.reply({content: 'Your submission was received successfully!' })};
-            const submited_game_name = interaction.fields.getTextInputValue('game_name_input')
-            console.log(submited_game_name)
+            // console.log(interaction.customId)
+            if (interaction.customId === 'welcome_modal') {
+                const game_name = interaction.fields.getTextInputValue('game_name');
+                // console.log(game_name);
+
+                const welcome_embed = new EmbedBuilder()
+                .setColor(0xcfeb34)
+                .setTitle(`Welcome to [TnP]TheSecondPack [TnP]${game_name}.`)
+                .setDescription('Here are some helpful recommendations:')
+                .addFields(
+                    {name: '🧭 Relocate:', value: 'Relocate near alliance territory/stronghold.', inline: true},
+                    {name: '♻️ Donate:', value: 'Minimum 10 daily donations to alliance technology.', inline: true}
+                )
+                .addFields({name: '📈 Grow:', value: 'Concentrate on dailies, gathering L4/higher(when available) resources and alliance mine at the moment, set builds and army growth. Attack common tribes regularly to gain EXP books, alliance founds, and more.'})
+                // .setTimestamp()
+                .setFooter({text: 'Leader'});
+                await interaction.reply({ embeds:[welcome_embed], flags: MessageFlags.Ephemeral })
+            };
         } else if (interaction.isUserContextMenuCommand()){
             const { username } = interaction.targetUser
             if (username) {await interaction.reply(username)}
