@@ -1,0 +1,67 @@
+const { SlashCommandBuilder, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle, EmbedBuilder } = require('discord.js')
+
+module.exports = {
+    data: new SlashCommandBuilder()
+            .setName('rulesXguides')
+            .setDescription('Send rules x guide to rXg channel'),
+    async execute(interaction) {
+        const { channels } = interaction.guild;
+        const ruleXguide_channel = await channels.cache.find((channel) => channel.name === 'rules-x-guide').fetch()
+        const allience_rules_embed = new EmbedBuilder()
+                .setColor(0xcfeb34)
+                .setTitle('Alliance Rules')
+                .setDescription('Most follow Alliance Rules.')
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                .setFooter({text: 'Oracle'});
+        const discord_rules_embed = new EmbedBuilder()
+                .setColor(0xcfeb34)
+                .setTitle('Discord Rules')
+                .setDescription('Common Discord rules.')
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                .setFooter({text: 'Oracle'});
+        const guide_embed = new EmbedBuilder()
+                .setColor(0xcfeb34)
+                .setTitle('Guide x Description')
+                .setDescription('Server channels guide x descrioption.')
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                // .addFields({ name: '', value:'', inline: true })
+                .setFooter({text: 'Oracle'});
+        try {
+            await ruleXguide_channel.send({embeds:[discord_rules_embed, allience_rules_embed, guide_embed]})
+        } catch (error) { console.log(error)}
+    }   
+};

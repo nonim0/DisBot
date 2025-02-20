@@ -39,23 +39,27 @@ module.exports = {
                 catch (error) {console.error(error)};
             };
         } else if (interaction.isModalSubmit()) {
-            // console.log(interaction.customId)
             if (interaction.customId === 'welcome_modal') {
+                const { name } = interaction.guild.name;
+                const alliance_name = name;
                 const game_name = interaction.fields.getTextInputValue('game_name');
-                // console.log(game_name);
+                const country = interaction.fields.getTextInputValue('country');
+                const time_zone = interaction.fields.getTextInputValue('time_zone')
+                const language_1 = interaction.fields.getTextInputValue('language_1');
+                const language_2 = interaction.fields.getTextInputValue('language_2')
 
                 const welcome_embed = new EmbedBuilder()
-                .setColor(0xcfeb34)
-                .setTitle(`Welcome to [TnP]TheSecondPack [TnP]${game_name}.`)
-                .setDescription('Here are some helpful recommendations:')
-                .addFields(
-                    {name: '🧭 Relocate:', value: 'Relocate near alliance territory/stronghold.', inline: true},
-                    {name: '♻️ Donate:', value: 'Minimum 10 daily donations to alliance technology.', inline: true}
-                )
-                .addFields({name: '📈 Grow:', value: 'Concentrate on dailies, gathering L4/higher(when available) resources and alliance mine at the moment, set builds and army growth. Attack common tribes regularly to gain EXP books, alliance founds, and more.'})
-                // .setTimestamp()
-                .setFooter({text: 'Leader'});
-                await interaction.reply({ embeds:[welcome_embed], flags: MessageFlags.Ephemeral })
+                    .setColor(0xcfeb34)
+                    .setTitle(`Welcome to ${ alliance_name } [TnP]${ game_name }.`)
+                    .setDescription('Here are some helpful recommendations:')
+                    .addFields(
+                        {name: '🧭 Relocate:', value: 'Relocate near alliance territory/stronghold.', inline: true},
+                        {name: '♻️ Donate:', value: 'Minimum 10 daily donations to alliance technology.', inline: true}
+                    )
+                    .addFields({name: '📈 Grow:', value: 'Concentrate on dailies, gathering L4/higher(when available) resources and alliance mine at the moment, set builds and army growth. Attack common tribes regularly to gain EXP books, alliance founds, and more.'})
+                    // .setTimestamp()
+                    .setFooter({text: 'Leader'});
+                await interaction.reply({ embeds:[welcome_embed] })
             };
         } else if (interaction.isUserContextMenuCommand()){
             const { username } = interaction.targetUser
